@@ -5,16 +5,23 @@
 
 This module is a simple runtime for the Pulp architecture.
 
-### Runtime build
+### 設定
 
 You need to first install the Linux dependencies (see [below](#dependencies)).
 
-Choose the configuration for which you want to compile the runtime, for example:
+PremoC1用設定
 
-    $ source configs/pulp.sh
+```sh
+source configs/premoc1.sh
+```
 
 Then you can get one of the pulp example, compile and run it.
 
+設定スクリプトに以下を追加することで、stdoutをUARTに出力できる
+
+```sh
+export io=uart
+```
 
 ## Linux dependencies
 
