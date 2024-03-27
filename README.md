@@ -23,6 +23,15 @@ Then you can get one of the pulp example, compile and run it.
 export io=uart
 ```
 
+### 実行
+
+プログラムを実行する前に以下のスクリプトが必要
+```sh
+sudo openocd -f openocd-ftdi2232.cfg
+```
+
+プログラムはgdbで送る
+
 ## Linux dependencies
 
 Here are the required system dependencies for building the runtime and its dependencies.

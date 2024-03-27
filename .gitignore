@@ -1,5 +1,5 @@
 # examples build artifacts
-examples/*/build/
+examples/**/build/
 
 
 # Prerequisites
