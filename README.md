@@ -32,6 +32,14 @@ sudo openocd -f openocd-ftdi2232.cfg
 
 プログラムはgdbで送る
 
+### システムクロック
+
+現状クロック 25MHz前提でソースコードを書いている
+
+既知のクロックに依存するソースコード
+
+`drivers/uart.c uart_setup()`
+
 ## Linux dependencies
 
 Here are the required system dependencies for building the runtime and its dependencies.

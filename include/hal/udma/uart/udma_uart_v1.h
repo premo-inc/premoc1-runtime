@@ -119,7 +119,7 @@ static inline void plp_uart_setup(int channel, int parity, uint16_t clk_counter)
   //                 11 = 8 bits
   // [0]: parity
 
-  unsigned int val = 0x0306 | parity; // both tx and rx enabled; 8N1 configuration; 1 stop bits
+  unsigned int val = 0x030e | parity; // both tx and rx enabled; 8N1 configuration; 1 stop bits
 
   val |= ((clk_counter) << 16);
 
