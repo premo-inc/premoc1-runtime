@@ -18,7 +18,7 @@
 #define __ARCHI_UDMA_UDMA_I2C_V2_H__
 
 // I2C command IDS definition
-#define I2C_CMD_OFFSET       4
+#define I2C_CMD_OFFSET       28
 #define I2C_CMD_START                    (0x0 << I2C_CMD_OFFSET)
 #define I2C_CMD_STOP                     (0x2 << I2C_CMD_OFFSET)
 #define I2C_CMD_RD_ACK                   (0x4 << I2C_CMD_OFFSET)

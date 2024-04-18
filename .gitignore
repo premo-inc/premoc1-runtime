@@ -1,6 +1,7 @@
 # examples build artifacts
 examples/**/build/
 
+.vscode/
 
 # Prerequisites
 *.d

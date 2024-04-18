@@ -75,6 +75,11 @@ void uart_close(int uart_id);
 int uart_write(int uart_id, void *buffer, uint32_t size);
 int uart_read(int uart_id, void *buffer, uint32_t size);
 
+void i2c_open();
+void i2c_close();
+void i2c_read(uint8_t addr, uint8_t length, uint8_t *data);
+void i2c_write(uint8_t addr, uint8_t length, uint8_t *data);
+
 void synch_barrier();
 
 
