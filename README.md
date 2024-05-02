@@ -1,5 +1,8 @@
 # PULP runtime
 
+## Attention
+
+このブランチはflash書き込み用のブランチです。masterにmergeするといろんな意味で死ぬので決してやらないように。
 
 ## About
 
