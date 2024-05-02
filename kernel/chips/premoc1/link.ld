@@ -1,89 +1,35 @@
 
 OUTPUT_ARCH(riscv)
 ENTRY( _start )
+
 MEMORY
 {
-  L2           : ORIGIN = 0x1c000004, LENGTH = 0x000bfffc
+  FLASH (rx)  : ORIGIN = 0x1c000000, LENGTH = 0x00004000
+  L2 (rw)     : ORIGIN = 0x1c004004, LENGTH = 0x00007ffc
 }
 
 /*
- * This linker script try to put FC data in L2 private bank0 and FC code 
- * in L2 private bank1 to avoid contention between FC code and data
- * as FC has no instruction cache and is so often accessing L2 to
- * get instructions. Everything can be shifted in case one bank is full.
- *
- * Cluster code and initialized data are put in shared banks to not polute
- * private banks which are quite small, and also avoid contentions between
- * cluster cache refill and FC.
- */
-
+MEMORY
+{
+  FLASH (rx)   : ORIGIN = 0x1a000000, LENGTH = 0x00010000
+  L2 (rw)     : ORIGIN = 0x1c000004, LENGTH = 0x0000bffc
+}
+*/
 
 SECTIONS
 {
-  /*
-   * L2 PRIVATE BANK0
-   *
-   * Contains FC data
-   */
-
-  .init :
+  .text MAX(0x1c000000,ALIGN(4)) :
   {
     . = ALIGN(4);
-    KEEP( *(.init) )
-  } > L2
-
-
-  .fini :
-  {
+    _stext = .;
+    *(.text)
+    *(.text.*)
+    _etext  =  .;
+    *(.lit)
+    *(.shdata)
+    _endtext = .;
     . = ALIGN(4);
-    KEEP( *(.fini) )
-  } > L2
-
-
-  .preinit_array : {
-    . = ALIGN(4);
-    PROVIDE_HIDDEN (__preinit_array_start = .);
-    KEEP (*(.preinit_array))
-    PROVIDE_HIDDEN (__preinit_array_end = .);
-  } > L2
-
-
-  .init_array : {
-    . = ALIGN(4);
-    PROVIDE_HIDDEN (__init_array_start = .);
-    __CTOR_LIST__ = .;
-    LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2)
-    KEEP(*(.ctors.start))
-    KEEP(*(.ctors))
-    KEEP (*(SORT(.init_array.*)))
-    KEEP (*(.init_array ))
-    LONG(0)
-    __CTOR_END__ = .;
-    PROVIDE_HIDDEN (__init_array_end = .);
-  } > L2
-
-
-  .fini_array : {
-    . = ALIGN(4);
-    PROVIDE_HIDDEN (__fini_array_start = .);
-    __DTOR_LIST__ = .;
-    LONG((__DTOR_END__ - __DTOR_LIST__) / 4 - 2)
-    KEEP(*(.dtors.start))
-    KEEP(*(.dtors))
-    LONG(0)
-    __DTOR_END__ = .;
-    KEEP (*(SORT(.fini_array.*)))
-    KEEP (*(.fini_array ))
-    PROVIDE_HIDDEN (__fini_array_end = .);
-  } > L2
-
-
-  .boot : {
-    . = ALIGN(4);
-    *(.boot)
-    *(.boot.data)
-  } > L2
-
+  } > FLASH
 
   .rodata : {
     . = ALIGN(4);
@@ -92,14 +38,19 @@ SECTIONS
     *(.srodata);
     *(.srodata.*)
     *(.eh_frame*)
-  } > L2
+    _endrodata = .;
+  } > FLASH
 
+  .boot : {
+    . = ALIGN(4);
+    *(.boot)
+    *(.boot.data)
+  } > L2
 
   .got : {
     . = ALIGN(4);
     *(.got.plt) * (.igot.plt) *(.got) *(.igot)
   } > L2
-
 
   .shbss : {
     . = ALIGN(4);
@@ -150,7 +101,7 @@ SECTIONS
     . = ALIGN(4);
     edata  =  .;
     _edata  =  .;
-  } > L2
+  } > L2 AT > FLASH
 
 
   .bss : {
@@ -168,44 +119,50 @@ SECTIONS
 
   __l2_priv0_end = ALIGN(4);
 
-
-
-
-  /*
-   * L2 PRIVATE BANK1
-   *
-   * Contains FC code
-   */
-
-  .vectors MAX(0x1c004000,ALIGN(256)) :
+  .vectors :
   {
     __irq_vector_base = .;
     KEEP(*(.vectors))
-  } > L2
-
-  .text :
-  {
-    . = ALIGN(4);
-    _stext = .;
-    *(.text)
-    *(.text.*)
-    _etext  =  .;
-    *(.lit)
-    *(.shdata)
-    _endtext = .;
-    . = ALIGN(4);
-  } > L2
+  } > FLASH
 
   __l2_priv1_end = ALIGN(4);
 
+  .preinit_array : {
+    . = ALIGN(4);
+    PROVIDE_HIDDEN (__preinit_array_start = .);
+    KEEP (*(.preinit_array))
+    PROVIDE_HIDDEN (__preinit_array_end = .);
+  } > FLASH
 
-  /*
-   * L2 SHARED BANKS
-   *
-   * Contains other data such as peripheral data and cluster code and data
-   */
+  .init_array : {
+    . = ALIGN(4);
+    PROVIDE_HIDDEN (__init_array_start = .);
+    __CTOR_LIST__ = .;
+    LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2)
+    KEEP(*(.ctors.start))
+    KEEP(*(.ctors))
+    KEEP (*(SORT(.init_array.*)))
+    KEEP (*(.init_array ))
+    LONG(0)
+    __CTOR_END__ = .;
+    PROVIDE_HIDDEN (__init_array_end = .);
+  } > FLASH
 
-  .l2_data MAX(0x1c008000,ALIGN(4)) :
+  .fini_array : {
+    . = ALIGN(4);
+    PROVIDE_HIDDEN (__fini_array_start = .);
+    __DTOR_LIST__ = .;
+    LONG((__DTOR_END__ - __DTOR_LIST__) / 4 - 2)
+    KEEP(*(.dtors.start))
+    KEEP(*(.dtors))
+    LONG(0)
+    __DTOR_END__ = .;
+    KEEP (*(SORT(.fini_array.*)))
+    KEEP (*(.fini_array ))
+    PROVIDE_HIDDEN (__fini_array_end = .);
+  } > FLASH
+
+  .l2_data :
   {
     . = ALIGN(4);
     __cluster_text_start = .;

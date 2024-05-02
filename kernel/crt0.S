@@ -20,7 +20,6 @@
     .section .text
     .global pos_init_entry
 pos_init_entry:
-
     # Cluster PEs will also starts here to avoid aligning another entry point
     # Just re-route them to the right entry
 #if defined(ARCHI_HAS_CLUSTER)
@@ -45,15 +44,24 @@ pos_init_entry:
 
 #endif
 
-
+    # Copy initialized data from flash to RAM (data)
+    la      t0, _sdata
+    la      t1, _edata
+    la      t2, _endrodata
+copy_data_loop:
+    lw      t3, 0(t2)
+    sw      t3, 0(t0)
+    addi    t0, t0, 4
+    addi    t2, t2, 4
+    bltu    t0, t1, copy_data_loop
 
     # Clear the bss segment
     la      t0, _bss_start
     la      t1, _bss_end
-1:
-    sw      zero,0(t0)
+zero_bss_loop:
+    sw      zero, 0(t0)
     addi    t0, t0, 4
-    bltu    t0, t1, 1b
+    bltu    t0, t1, zero_bss_loop
 
 
 

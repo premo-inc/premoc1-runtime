@@ -1,0 +1,4 @@
+build/
+convert_raw
+*.cv
+*.raw
