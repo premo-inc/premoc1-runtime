@@ -5,7 +5,7 @@
 #define TRUE 1
 #define FALSE 0
 
-long strtol(const char *nPtr, char **endPtr, int base)
+unsigned long ustrtol(const char *nPtr, char **endPtr, int base)
 {
     // checking if the base value is correct
     if ((base < 2 || base > 36) && base != 0)
@@ -13,16 +13,9 @@ long strtol(const char *nPtr, char **endPtr, int base)
         return 0;
     }
 
-    long number = 0;
+    unsigned long number = 0;
     const char *divider;
-    int currentdigit,
-        sign,
-        cutlim;
-    enum sign
-    {
-        NEGATIVE,
-        POSITIVE
-    };
+    int currentdigit;
     unsigned long cutoff;
     BOOL correctconversion = TRUE;
 
@@ -31,20 +24,6 @@ long strtol(const char *nPtr, char **endPtr, int base)
     // looking for a space if the beggining of the string is moved further
     while ((*divider) == ' ' || (*divider) == '\r' || (*divider) == '\n')
         divider++;
-
-    // detecting the sign, positive by default
-    if (*divider == '+')
-    {
-        sign = POSITIVE;
-        divider++;
-    }
-    else if (*divider == '-')
-    {
-        sign = NEGATIVE;
-        divider++;
-    }
-    else
-        sign = POSITIVE;
 
     if (*divider == NUL)
     {
@@ -108,13 +87,6 @@ long strtol(const char *nPtr, char **endPtr, int base)
         }
     }
 
-    // two conditions just for clarity --> |LONG_MIN| = LONG_MAX + 1
-    if (sign)
-        cutoff = LONG_MAX / (unsigned long)base;
-    else
-        cutoff = (unsigned long)LONG_MIN / (unsigned long)base;
-    cutlim = cutoff % (unsigned long)base;
-
     // looping until the end of the input string
     // searching for convertable characters
     while (*divider != NUL)
@@ -138,29 +110,10 @@ long strtol(const char *nPtr, char **endPtr, int base)
             else
                 break;
         }
-        if (!correctconversion ||
-            number > cutoff ||
-            (number == cutoff && (int)currentdigit > cutlim))
-        {
-            correctconversion = FALSE;
-            divider++;
-        }
-        else
-        { // the actual conversion to decimal
-            correctconversion = TRUE;
-            number = (number * base) + currentdigit;
-            divider++;
-        }
+        number = (number * base) + currentdigit;
+        divider++;
     }
-    if (!correctconversion)
-    {
-        if (sign)
-            number = LONG_MAX;
-        else
-            number = LONG_MIN;
-    }
-    if (sign == NEGATIVE)
-        number *= -1;
+    
     if (endPtr != NUL)
     {
         if ((*divider) == ' ' || (*divider) == '\r' || (*divider) == '\n') // checking if the number is separated
