@@ -123,7 +123,7 @@ int main()
 					*/
 					break;
 				case COMMAND_I2C_READ:
-					i2c_read((uint8_t)(addr & 0xff), size, response);
+					i2c_read((uint8_t)(addr & 0x7f), size, response);
 					for (int i = 0; i < size; i++) {
 						sprintf(message, "0x%02X ", response[i]);
 						uart_write(UART0_PER_ID, message, strlen(message));
@@ -131,7 +131,7 @@ int main()
 					uart_write(UART0_PER_ID, "\n", 1);
 					break;
 				case COMMAND_I2C_WRITE:
-					i2c_write((uint8_t)(addr & 0xff), size, message);
+					i2c_write((uint8_t)(addr & 0x7f), size, message);
 					break;
 				case COMMAND_SPI_READ:
 					// spim_reads(1, (uint8_t)(addr & 0xff), size, response);
