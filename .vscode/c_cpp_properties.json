@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/include/chips/pulpissimo"
+            ],
+            "defines": [
+                "PULPRT_TARGET=premoc1",
+                "PULPRUN_TARGET=premoc1",
+                "PULP_CHIP_STR=pulpissimo"
+            ],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}

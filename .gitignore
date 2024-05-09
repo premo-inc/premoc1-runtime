@@ -1,7 +1,9 @@
 # examples build artifacts
 examples/**/build/
 
-.vscode/
+.vscode/*
+!.vscode/c_cpp_properties.json
+!.vscode/extensions.json
 
 # Prerequisites
 *.d
