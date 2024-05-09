@@ -48,7 +48,7 @@ int main()
 	i2c_open();
 	uart_open(UART0_PER_ID, 115200);
 
-	char STARTUP_MESSAGE[] = "UART Editor\n";
+	char STARTUP_MESSAGE[] = "UART Editor\n>";
 	uart_write(UART0_PER_ID, STARTUP_MESSAGE, sizeof(STARTUP_MESSAGE));
 
 	uint8_t command = 0;
@@ -97,7 +97,6 @@ int main()
 
 			if (flush == 1)
 			{
-				uart_write(UART0_PER_ID, "Accept", 7);
 				switch (command)
 				{
 				case COMMAND_MEM_READ:
@@ -112,8 +111,8 @@ int main()
 					break;
 				case COMMAND_JUMP:
 					// Jump
-					(*(uint32_t*)0x1c004000) = addr;
-					asm volatile("lui t0, 0x1c004");
+					(*(uint32_t*)0x1c002000) = addr;
+					asm volatile("lui t0, 0x1c002");
 					asm volatile("lw  t1, 0(t0)");
 					asm volatile("jalr ra, t1");
 					// If you want to return uart editor, you must append this code into end of your program...
@@ -143,7 +142,6 @@ int main()
 					break;
 				case COMMAND_SPI_WRITE:
 					// spim_writes(1, (uint8_t)(addr & 0xff), size, message);
-					i2c_write((uint8_t)(addr & 0xff), size, message);
 					break;
 				}
 
@@ -152,6 +150,8 @@ int main()
 				addr = 0;
 				message_count = 0;
 				flush = 0;
+
+				uart_write(UART0_PER_ID, ">", 1);
 			}
 		}
 		else
