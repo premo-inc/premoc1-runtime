@@ -174,10 +174,10 @@ int main()
 				command = COMMAND_I2C_WRITE;
 				break;
 			case 's':
-				command = COMMAND_I2C_READ;
+				command = COMMAND_SPI_READ;
 				break;
 			case 'S':
-				command = COMMAND_I2C_WRITE;
+				command = COMMAND_SPI_WRITE;
 				break;
 			case ' ':
 			case '\r':
