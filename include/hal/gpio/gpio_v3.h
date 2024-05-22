@@ -153,6 +153,21 @@ static inline void hal_gpio_set_dir(uint32_t mask, uint8_t is_out)
   gpio_paddir_set(ARCHI_GPIO_ADDR, current);
 }
 
+static inline void hal_gpio_set_pin_dir(uint32_t pin, uint8_t is_out)
+{
+  uint32_t current = gpio_paddir_get(ARCHI_GPIO_ADDR);
+  if (is_out)
+  {
+    current |= 1<<pin;
+  }
+  else
+  {
+    current &= ~(1<<pin);
+  }
+  gpio_gpioen_set(ARCHI_GPIO_ADDR, current);
+  gpio_paddir_set(ARCHI_GPIO_ADDR, current);
+}
+
 static inline void hal_gpio_set_value(uint32_t mask, uint8_t value)
 {
   uint32_t current = gpio_padout_get(ARCHI_GPIO_ADDR);
@@ -187,6 +202,13 @@ static inline void hal_gpio_set_pin_value(uint32_t pin, uint8_t value)
     current &= ~(1<<pin);
   }
   gpio_padout_set(ARCHI_GPIO_ADDR, current);
+}
+
+
+static inline uint32_t hal_gpio_get_pin_value(uint32_t pin)
+{
+  uint32_t current = gpio_padout_get(ARCHI_GPIO_ADDR);
+  return (current >> pin) & 1;
 }
 
 #endif
