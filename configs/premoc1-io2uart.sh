@@ -3,8 +3,9 @@
 export PULPRT_TARGET=premoc1
 export PULPRUN_TARGET=premoc1
 
-# stdoutをuartに出力する
-# export io=uart
+#! stdoutをuartに出力する
+#! enable printf
+export io=uart
 
 if [  -n "${ZSH_VERSION:-}" ]; then
         DIR="$(readlink -f -- "${(%):-%x}")"
