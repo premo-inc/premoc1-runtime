@@ -2,7 +2,7 @@
 
 ## Attention
 
-このブランチはflash書き込み用のブランチです。masterにmergeするといろんな意味で死ぬので決してやらないように。
+このブランチはflash書き込み用のブランチです。masterにmergeするといろんな意味で死にます。
 
 ## About
 
