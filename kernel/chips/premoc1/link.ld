@@ -4,8 +4,8 @@ ENTRY( _start )
 
 MEMORY
 {
-  FLASH (rx)  : ORIGIN = 0x1c000000, LENGTH = 0x00004000
-  L2 (rw)     : ORIGIN = 0x1c004004, LENGTH = 0x00007ffc
+  FLASH (rx)  : ORIGIN = 0x1c000000, LENGTH = 0x00002000
+  L2 (rw)     : ORIGIN = 0x1c002004, LENGTH = 0x00001ffc
 }
 
 /*
