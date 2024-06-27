@@ -23,9 +23,11 @@ PULP_ARCH_LDFLAGS ?=  -march=rv32imcxgap9
 PULP_ARCH_OBJDFLAGS ?= -Mmarch=rv32imcxgap9
 endif
 
+PULP_LINKER ?= link.ld
+
 PULP_CFLAGS    += -fdata-sections -ffunction-sections -include chips/pulpissimo/config.h -I$(PULPRT_HOME)/include/chips/pulpissimo
 PULP_OMP_CFLAGS    += -fopenmp -mnativeomp
-PULP_LDFLAGS += -nostartfiles -nostdlib -Wl,--gc-sections -L$(PULPRT_HOME)/kernel -Tchips/premoc1/link.ld -lgcc
+PULP_LDFLAGS += -nostartfiles -nostdlib -Wl,--gc-sections -L$(PULPRT_HOME)/kernel -Tchips/premoc1/$(PULP_LINKER) -lgcc
 
 PULP_CC = riscv32-unknown-elf-gcc
 PULP_AR ?= riscv32-unknown-elf-ar

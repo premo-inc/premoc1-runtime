@@ -6,6 +6,8 @@ PULP_ARCH_CFLAGS    =  -march=rv32imc -DRV_ISA_RV32
 PULP_ARCH_LDFLAGS   =  -march=rv32imc
 PULP_ARCH_OBJDFLAGS = -Mmarch=rv32imc
 
+PULP_LINKER = link_uart.ld
+
 include $(PULPRT_HOME)/rules/pulp.mk
 
 clean:
