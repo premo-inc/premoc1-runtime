@@ -1,6 +1,7 @@
 import sys
 import time
 import telnetlib
+import tqdm
 
 # Telnet Timeout
 TIMEOUT = 1
@@ -54,10 +55,16 @@ tn.expect([b'>'], TIMEOUT)
 tn.write(b'write_memory 0x1a121000 32 0x00000041' + b'\n')
 
 address = 0
+loop_cnt = data_size // 4
+pbar = tqdm.tqdm(total=loop_cnt, desc='Writing Program', unit='word')
 while address < data_size:
+  start = time.perf_counter()
   tn.expect([b'>'], TIMEOUT)
   tn.write(b'write_memory ' + bytes(hex(START_ADDRESS + address).encode('ascii')) + b' 32 ' + bytes(hex(int.from_bytes(data[address:address+4], byteorder='little')).encode('ascii')) + b'\n')
   address = address + 4
+  end = time.perf_counter()
+  # print('Elapsed time: {}'.format(end - start))
+  pbar.update(1)
   # time.sleep(0.025)
 
 tn.expect([b'>'], TIMEOUT)
@@ -88,4 +95,3 @@ else:
 
 # Finish Telnet Section
 tn.close()
-
