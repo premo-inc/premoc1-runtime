@@ -1,2 +1,3 @@
 serial
 telnetlib
+tqdm
