@@ -1,6 +1,7 @@
 import sys
 import time
 import serial
+import tqdm
 
 # Telnet Timeout
 TIMEOUT = 1
@@ -23,12 +24,14 @@ uart = serial.Serial(port=PORT, baudrate=115200, timeout=TIMEOUT, bytesize=seria
 # dummy command
 uart.write(b'm 0x1c000000 4 \r\n')
 
+pbar = tqdm.tqdm(total=data_size // 4, desc='Writing Program', unit='word')
 address = 0
 while address < data_size:
   uart.read_until(b'>')
   uart.write(b'M ' + bytes(hex(START_ADDRESS + address).encode('ascii')) + b' 4 ' + bytes(hex(int.from_bytes(data[address:address+4], byteorder='little')).encode('ascii')) + b'\r\n')
   uart.flush()
   address = address + 4
+  pbar.update(1)
   # time.sleep(0.01)
 
 # Verify Program
