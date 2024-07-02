@@ -58,11 +58,19 @@ address = 0
 loop_cnt = data_size // 4
 pbar = tqdm.tqdm(total=loop_cnt, desc='Writing Program', unit='word')
 while address < data_size:
+  # wait for busy bit to 0
+  while True:
+    tn.expect([b'>'], TIMEOUT)
+    tn.write(b'read_memory 0x1a121000 32 1' + b'\n')
+    tn.read_until(b'\n', TIMEOUT) # Skip input command
+    output = int(tn.read_until(b'\n', TIMEOUT).decode('utf-8'), 0)
+    if (output >> 31) == 0:
+      break
+
   tn.expect([b'>'], TIMEOUT)
   tn.write(b'write_memory ' + bytes(hex(START_ADDRESS + address).encode('ascii')) + b' 32 ' + bytes(hex(int.from_bytes(data[address:address+4], byteorder='little')).encode('ascii')) + b'\n')
   address = address + 4
   pbar.update(1)
-  # time.sleep(0.025)
 
 tn.expect([b'>'], TIMEOUT)
 tn.write(b'write_memory 0x1a121000 32 0x00000041' + b'\n')
