@@ -27,7 +27,6 @@ tn.expect([b'>'], TIMEOUT)
 tn.write(b'write_memory 0x1a121000 32 0x00000040' + b'\n')
 tn.expect([b'>'], TIMEOUT)
 tn.write(b'write_memory 0x1a121000 32 0x00000041' + b'\n')
-
 tn.expect([b'>'], TIMEOUT)
 tn.write(b'write_memory 0x1a121004 32 0xffffffff' + b'\n')
 tn.expect([b'>'], TIMEOUT)
@@ -36,15 +35,6 @@ tn.expect([b'>'], TIMEOUT)
 tn.write(b'write_memory 0x1a121000 32 0x00000042' + b'\n')
 tn.expect([b'>'], TIMEOUT)
 tn.write(b'write_memory 0x1a000000 32 0xaaaaaaaa' + b'\n')
-tn.expect([b'>'], TIMEOUT)
-tn.write(b'write_memory 0x1a121000 32 0x00000040' + b'\n')
-tn.expect([b'>'], TIMEOUT)
-tn.write(b'write_memory 0x1a121000 32 0x00000000' + b'\n')
-
-tn.expect([b'>'], TIMEOUT)
-tn.write(b'write_memory 0x1a121000 32 0x00000041' + b'\n')
-tn.expect([b'>'], TIMEOUT)
-tn.write(b'write_memory 0x1a121000 32 0x00000040' + b'\n')
 
 time.sleep(1)
 
@@ -71,11 +61,6 @@ while address < data_size:
   tn.write(b'write_memory ' + bytes(hex(START_ADDRESS + address).encode('ascii')) + b' 32 ' + bytes(hex(int.from_bytes(data[address:address+4], byteorder='little')).encode('ascii')) + b'\n')
   address = address + 4
   pbar.update(1)
-
-tn.expect([b'>'], TIMEOUT)
-tn.write(b'write_memory 0x1a121000 32 0x00000041' + b'\n')
-tn.expect([b'>'], TIMEOUT)
-tn.write(b'write_memory 0x1a121000 32 0x00000040' + b'\n')
 
 # Verify Program
 address = 0

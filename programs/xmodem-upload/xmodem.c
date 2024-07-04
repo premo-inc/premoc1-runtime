@@ -125,7 +125,7 @@ int xmodemReceive(unsigned char *dest, int destsz)
 	for (;;) {
 		for (;;) {
 			if (trychar) _outbyte(trychar);
-			if ((c = _inbyte((DLY_1S)<<1)) >= 0) {
+			if ((c = _inbyte((DLY_1S)>>2)) >= 0) {
 				switch (c) {
 				case SOH:
 					bufsz = 128;
