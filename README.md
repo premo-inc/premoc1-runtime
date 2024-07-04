@@ -1,9 +1,5 @@
 # PULP runtime
 
-## Attention
-
-このブランチはflash書き込み用のブランチです。masterにmergeするといろんな意味で死にます。
-
 ## About
 
 This module is a simple runtime for the Pulp architecture.
