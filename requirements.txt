@@ -1,0 +1,3 @@
+tqdm
+crc16
+pyserial

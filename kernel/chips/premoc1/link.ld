@@ -92,6 +92,7 @@ SECTIONS
     *(.srodata);
     *(.srodata.*)
     *(.eh_frame*)
+    _endrodata = .;
   } > L2
 
 
