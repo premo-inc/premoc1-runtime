@@ -45,8 +45,6 @@ static void uart_setup(int channel, int baudrate)
 {
   int div = (25000000 + (baudrate / 2)) / baudrate;
 
-  // plp_uart_setup(channel - ARCHI_UDMA_UART_ID(0), 0, div-1);
-
   // DIV 6b:230.4kbps, d6:115.2kbps
   plp_uart_setup(channel - ARCHI_UDMA_UART_ID(0), 0, div);
 }
