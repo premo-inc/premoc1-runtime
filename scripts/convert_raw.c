@@ -44,8 +44,11 @@ int main(int argc, char *argv[]) {
     0x0ff00313, // addi t1, x0, 0xff
     0x00638023, // sb t1, 0(t2)
     0x00638223, // sb t1, 4(t2)
-    0x00000013, // nop
+    0x00010337, // lui t1, 0x10 <---|
+    0xfff30313, // addi t1, t1, -1  |
+    0xfe031ee3, // bne t1, x0, -4 --|
     0x00838303, // lb t1, 8(t2)
+    0x00137313, // andi t1, t1, 1
     0x00c31313, // slli t1, t1, 12
     0x006282b3, // add t0, t0, t1
 #endif

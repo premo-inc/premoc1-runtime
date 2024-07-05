@@ -36,27 +36,30 @@ int main(void)
 	psize = xmodemReceive((char *)SRAM_BASE, 0x4000);
 	uart_close(UART0_PER_ID);
 
-	archi_write32(P_FLCR, 0x00000040);
-	archi_write32(P_FLCR, 0x00000041);
-	archi_write32(P_FLEB, 0xffffffe0);
-	archi_write32(P_FLCR, 0x00000040);
-	archi_write32(P_FLCR, 0x00000042);
-	archi_write32(FLASH_BASE, 0xAAAAAAAA);
-	wait_flash_busy();
-
-	archi_write32(P_FLCR, 0x00000040);
-	archi_write32(P_FLCR, 0x00000041);
-	archi_write32(P_FLPT, 0x000001f4); // FLASH Program Timer
-
-	archi_write32(PROGRAM_BASE, psize);
-	wait_flash_busy();
-	for (uint32_t addr = 0; addr < psize; addr += sizeof(uint32_t))
-	{
-		archi_write32(PROGRAM_BASE + addr + 4, archi_read32(SRAM_BASE + addr));
+	do {
+		archi_write32(P_FLCR, 0x00000040);
+		archi_write32(P_FLCR, 0x00000041);
+		archi_write32(P_FLEB, 0xffffffe0);
+		archi_write32(P_FLCR, 0x00000040);
+		archi_write32(P_FLCR, 0x00000042);
+		archi_write32(FLASH_BASE, 0xAAAAAAAA);
 		wait_flash_busy();
-	}
 
-	archi_write32(P_FLCR, 0x00000000);
+		archi_write32(P_FLCR, 0x00000040);
+		archi_write32(P_FLCR, 0x00000041);
+		archi_write32(P_FLPT, 0x000001f4); // FLASH Program Timer
+		wait_flash_busy();
+
+		archi_write32(PROGRAM_BASE, psize);
+		wait_flash_busy();
+		for (uint32_t addr = 0; addr < psize; addr += sizeof(uint32_t))
+		{
+			archi_write32(PROGRAM_BASE + addr + 4, archi_read32(SRAM_BASE + addr));
+			wait_flash_busy();
+		}
+
+		archi_write32(P_FLCR, 0x00000000);
+	} while (archi_read32(PROGRAM_BASE) != psize || memcmp((void*)SRAM_BASE, (void*)(PROGRAM_BASE + 4), psize) != 0);
 
 	// Reboot
 	asm volatile("lui t0, 0x1a000");
