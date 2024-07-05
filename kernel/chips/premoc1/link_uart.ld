@@ -93,7 +93,7 @@ SECTIONS
     . = ALIGN(4);
     edata  =  .;
     _edata  =  .;
-  } > L2 AT > FLASH
+  } > FLASH
 
 
   .bss : {
