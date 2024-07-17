@@ -16,7 +16,9 @@ clean:
 	rm -f convert_raw
 	rm -rf build
 
-write:
+all:
 	$(PULP_RISCV_GCC_TOOLCHAIN)/bin/riscv32-unknown-elf-objcopy -O binary build/$(PULP_APP)/$(PULP_APP) $(PULP_APP).raw --only-section=.text --only-section=.rodata --only-section=.data --only-section=.vectors --only-section=.preinit_array --only-section=.init_array --only-section=.fini_array
+
+write:
 	python3 ../../scripts/xmodem_uploader.py $(PORT) $(PULP_APP).raw
 
