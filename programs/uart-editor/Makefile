@@ -17,8 +17,10 @@ clean:
 	rm -rf build
 
 # Write raw program (load to ram)
-write:
+all:
 	$(PULP_RISCV_GCC_TOOLCHAIN)/bin/riscv32-unknown-elf-objcopy -O binary build/$(PULP_APP)/$(PULP_APP) $(PULP_APP).raw --only-section=.text --only-section=.rodata --only-section=.data --only-section=.vectors --only-section=.preinit_array --only-section=.init_array --only-section=.fini_array
 	gcc ../../scripts/convert_raw.c -o ../../scripts/convert_raw
 	../../scripts/convert_raw $(PULP_APP).raw $(PULP_APP).cv
+
+write:
 	python3 ../../scripts/write_telnet.py localhost 4444 0x1a000080 ./$(PULP_APP).cv
