@@ -41,9 +41,15 @@ static void uart_wait_rx_done(int periph)
 
 
 
+#define SOC_BOOTSEL 0x1A1040C4
+
 static void uart_setup(int channel, int baudrate)
 {
-  int div = (25000000 + (baudrate / 2)) / baudrate;
+  int bootsel0 = archi_read32(SOC_BOOTSEL) & 0x1;
+
+  int freq = (bootsel0 == 1) ? (25000000 / 16) : 25000000;
+
+  int div = (freq + (baudrate / 2)) / baudrate;
 
   // DIV 6b:230.4kbps, d6:115.2kbps
   plp_uart_setup(channel - ARCHI_UDMA_UART_ID(0), 0, div);
