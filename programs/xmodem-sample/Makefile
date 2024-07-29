@@ -12,7 +12,6 @@ include $(PULPRT_HOME)/rules/pulp.mk
 
 clean:
 	rm -f $(PULP_APP).raw
-	rm -f $(PULP_APP).cv
 	rm -f convert_raw
 	rm -rf build
 
